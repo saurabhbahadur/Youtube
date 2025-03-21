@@ -31,7 +31,7 @@ public class UserService {
 
         NotificationMessage message = new NotificationMessage();
         message.setEmail(user.getEmail());
-        message.setType("user-registration");
+        message.setType("user_registration");
         message.setName((user.getName()));
         rabbitMqService.insertMessageToQueue(message);
     }
