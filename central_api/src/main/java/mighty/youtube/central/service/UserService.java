@@ -23,6 +23,10 @@ public class UserService {
         this.rabbitMqService = rabbitMqService;
     }
 
+    public AppUser getUserByEmail(String email){
+        return appUserRepo.findByEmail(email);
+    }
+
     public void registerUSer(AppUser user){
 
         user.setCreatedAt(LocalDateTime.now());

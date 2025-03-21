@@ -43,6 +43,20 @@ public class CommonUserService {
 
     }
 
+    public void sendCreateChannelNotification(NotificationMessage notificationMessage) throws Exception{
+
+        Context context = new Context();
+        context.setVariable("userName", notificationMessage.getName());
+        context.setVariable("platformName", platformName);
+        String htmlEmailContent = templateEngine.process("create-channel-email", context);
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        mimeMessageHelper.setTo(notificationMessage.getEmail());
+        mimeMessageHelper.setSubject("Your Channel is Live!");
+        mimeMessageHelper.setText(htmlEmailContent, true);
+        mailService.sendEmail(mimeMessage);
+    }
+
 
 
 }

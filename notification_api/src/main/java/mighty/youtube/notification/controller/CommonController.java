@@ -25,9 +25,10 @@ public class CommonController {
             if(message.getType().equals(NotificationType.user_registration.toString())){
                 log.info("reg mil called");
                 commonUserService.sendUserRegistrationEmail(message);
+            }else if(message.getType().equals(NotificationType.create_channel.toString())) {
+                log.info("create channe email called");
+                commonUserService.sendCreateChannelNotification(message);
             }
-
-
 
         }catch (Exception e){
             log.error(e.getMessage());
