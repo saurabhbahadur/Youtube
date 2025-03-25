@@ -1,7 +1,24 @@
-<h1 align="center" > Central-API </h1>
-<p align="center"> User endpoints</p>
+<h1 align="center" > Notification-API </h1>
+<p align="center"> Mail-Service</p>
 
 ***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
