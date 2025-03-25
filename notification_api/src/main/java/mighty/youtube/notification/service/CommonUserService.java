@@ -57,6 +57,22 @@ public class CommonUserService {
         mailService.sendEmail(mimeMessage);
     }
 
+    public void sendSubscriberAddedEmail(NotificationMessage message) throws Exception{
+        Context context = new Context();
+        context.setVariable("channelName", message.getName());
+        context.setVariable("platformName" , platformName);
+
+        String htmlTemplate =  templateEngine.process("subscriber-added" , context);
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        mimeMessageHelper.setText(htmlTemplate,true);
+        mimeMessageHelper.setTo(message.getEmail());
+        mimeMessageHelper.setSubject("New Subscriber Added!");
+
+        mailService.sendEmail(mimeMessage);
+    }
+
 
 
 }

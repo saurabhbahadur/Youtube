@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -25,6 +26,10 @@ public class UserService {
 
     public AppUser getUserByEmail(String email){
         return appUserRepo.findByEmail(email);
+    }
+
+    public AppUser getUserById(UUID userId){
+        return appUserRepo.findById(userId).orElse(null);
     }
 
     public void registerUSer(AppUser user){

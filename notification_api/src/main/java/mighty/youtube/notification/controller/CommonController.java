@@ -19,15 +19,18 @@ public class CommonController {
 
     @RabbitListener(queues = "notification-queue")
     public void consumeMessage(@Payload NotificationMessage message) throws Exception {
-        log.info( "Inside notifiction api" + message.toString());
+        log.info( "Inside notification api" + message.toString());
 
         try{
             if(message.getType().equals(NotificationType.user_registration.toString())){
                 log.info("reg mil called");
                 commonUserService.sendUserRegistrationEmail(message);
             }else if(message.getType().equals(NotificationType.create_channel.toString())) {
-                log.info("create channe email called");
+                log.info("create channel email called");
                 commonUserService.sendCreateChannelNotification(message);
+            }else if(message.getType().equals(NotificationType.subscriber_added.toString())){
+                log.info("subscriber added email called");
+                commonUserService.sendSubscriberAddedEmail(message);
             }
 
         }catch (Exception e){

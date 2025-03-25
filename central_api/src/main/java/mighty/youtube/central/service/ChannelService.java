@@ -4,6 +4,7 @@ package mighty.youtube.central.service;
 import lombok.extern.slf4j.Slf4j;
 import mighty.youtube.central.dto.CreateChannelRequestBody;
 import mighty.youtube.central.dto.NotificationMessage;
+import mighty.youtube.central.exceptions.ChannelNotFound;
 import mighty.youtube.central.exceptions.UserNotFound;
 import mighty.youtube.central.models.AppUser;
 import mighty.youtube.central.models.Channel;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -25,6 +28,10 @@ public class ChannelService {
 
     @Autowired
     ChannelRepo channelRepo;
+
+    public Channel getChannelById(UUID channelId){
+        return channelRepo.findById(channelId).orElse(null);
+    }
 
     public void createChannel(CreateChannelRequestBody channelDetails){
         String email = channelDetails.getUserEmail();
@@ -53,6 +60,35 @@ public class ChannelService {
         notificationMessage.setType("create_channel");
         rabbitMqService.insertMessageToQueue(notificationMessage);
 
+
+    }
+
+    public void addSubscriber(UUID userId , UUID channelId){
+
+        AppUser user = userService.getUserById(userId);
+
+        if(user == null){
+            throw new UserNotFound(String.format("User with Id %s does not exist in the System." + userId.toString() ));
+        }
+
+        Channel channel = this.getChannelById(channelId);
+
+        if(channel == null ){
+            throw new ChannelNotFound(String.format("Channel with channel ID %s does not exist in the System"+ channelId.toString() ));
+        }
+
+        channel.setTotalSubs(channel.getTotalSubs() + 1);
+        List<AppUser> subscribers = channel.getSubscribers();
+        subscribers.add(user);
+
+        channelRepo.save(channel);
+
+        NotificationMessage message = new NotificationMessage();
+        message.setType("subscriber_added");
+        message.setEmail(channel.getUser().getEmail());
+        message.setName(channel.getName());
+
+        rabbitMqService.insertMessageToQueue(message);
 
     }
 
