@@ -29,6 +29,10 @@ public class ChannelService {
     @Autowired
     ChannelRepo channelRepo;
 
+    public void updateChannel(Channel channel){
+        channelRepo.save(channel);
+    }
+
     public Channel getChannelById(UUID channelId){
         return channelRepo.findById(channelId).orElse(null);
     }
