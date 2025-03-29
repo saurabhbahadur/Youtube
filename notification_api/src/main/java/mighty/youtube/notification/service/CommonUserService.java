@@ -2,6 +2,7 @@ package mighty.youtube.notification.service;
 
 
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 import mighty.youtube.notification.dto.NotificationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 @Service
+@Slf4j
 public class CommonUserService {
 
     @Autowired
@@ -70,6 +72,24 @@ public class CommonUserService {
         mimeMessageHelper.setTo(message.getEmail());
         mimeMessageHelper.setSubject("New Subscriber Added!");
 
+        mailService.sendEmail(mimeMessage);
+    }
+
+    public void notifyNewVideoUploadedToSubscriber(NotificationMessage notificationMessage) throws Exception{
+        String subscriberEmail = notificationMessage.getEmail();
+        String subscriberName = notificationMessage.getName();
+
+        Context context = new Context();
+        context.setVariable("subscriberName", subscriberEmail);
+        context.setVariable("videoLink", notificationMessage.getName());
+
+        String htmlTemplate = templateEngine.process("new-video-notification", context);
+        log.info(htmlTemplate);
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+        helper.setTo(subscriberEmail);
+        helper.setText(htmlTemplate, true);
+        helper.setSubject("New Video Alert !!");
         mailService.sendEmail(mimeMessage);
     }
 

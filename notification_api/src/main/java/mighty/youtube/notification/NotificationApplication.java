@@ -8,7 +8,7 @@ public class NotificationApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(NotificationApplication.class, args);
-		System.out.println("Notification api running on 8081 port");
+		System.out.println("Notification api running on 8086 port");
 	}
 
 }

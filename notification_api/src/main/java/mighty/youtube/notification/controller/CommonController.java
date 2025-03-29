@@ -31,6 +31,9 @@ public class CommonController {
             }else if(message.getType().equals(NotificationType.subscriber_added.toString())){
                 log.info("subscriber added email called");
                 commonUserService.sendSubscriberAddedEmail(message);
+            }else if(message.getType().equals(NotificationType.new_video.toString())){
+                log.info("New video mail called");
+                commonUserService.notifyNewVideoUploadedToSubscriber(message);
             }
 
         }catch (Exception e){

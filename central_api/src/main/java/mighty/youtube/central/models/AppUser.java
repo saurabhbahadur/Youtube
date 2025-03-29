@@ -28,6 +28,8 @@ public class AppUser {
     @Column(unique = true)
     String email;
 
+    String password;
+
     @Column(unique = true)
     Long phoneNumber;
 

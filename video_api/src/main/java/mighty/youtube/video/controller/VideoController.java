@@ -24,17 +24,17 @@ public class VideoController {
     @PostMapping("/upload")
     public ResponseEntity uploadVideo(@RequestPart("videoFile")MultipartFile video,
                                       @RequestParam UUID channelId,
-                                      @RequestBody VideoDetailsRequestBody videoDetailsRequestBody){
+                                      @RequestPart VideoDetailsRequestBody videoDetailsRequestBody){
 
         try{
-        VideoDetail videoDetail = uploadService.uploadVideo(video);
+        VideoDetail videoDetail = uploadService.uploadVideo(video , channelId , videoDetailsRequestBody);
         return new ResponseEntity(videoDetail, HttpStatus.CREATED); // 201
-    }catch (
-    InvalidFileType invalidFileType){
+        }catch (
+        InvalidFileType invalidFileType){
         GeneralMessage generalMessage = new GeneralMessage();
         generalMessage.setMessage(invalidFileType.getMessage());
         return new ResponseEntity(generalMessage, HttpStatus.BAD_REQUEST);
-    }catch (Exception e){
+         }catch (Exception e){
         GeneralMessage generalMessage = new GeneralMessage();
         generalMessage.setMessage(e.getMessage());
         return new ResponseEntity(generalMessage, HttpStatus.INTERNAL_SERVER_ERROR);
