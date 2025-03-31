@@ -2,6 +2,7 @@ package mighty.youtube.central.service;
 
 
 import lombok.extern.slf4j.Slf4j;
+import mighty.youtube.central.dto.ChannelFrontendDTO;
 import mighty.youtube.central.dto.CreateChannelRequestBody;
 import mighty.youtube.central.dto.NotificationMessage;
 import mighty.youtube.central.exceptions.ChannelNotFound;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,6 +38,8 @@ public class ChannelService {
     public Channel getChannelById(UUID channelId){
         return channelRepo.findById(channelId).orElse(null);
     }
+
+    public void deleteChannelById(UUID Id){ channelRepo.deleteById(Id); }
 
     public void createChannel(CreateChannelRequestBody channelDetails){
         String email = channelDetails.getUserEmail();
@@ -65,6 +69,34 @@ public class ChannelService {
         rabbitMqService.insertMessageToQueue(notificationMessage);
 
 
+    }
+
+    public List<ChannelFrontendDTO> getAllChannels(){
+        List<Channel> channels = channelRepo.findAll();
+
+        List<ChannelFrontendDTO> channelFrontendDTOList = new ArrayList<>();
+
+        for (Channel channel : channels){
+
+            ChannelFrontendDTO channelFrontendDTO = new ChannelFrontendDTO();
+
+            channelFrontendDTO.setId(channel.getId());
+            channelFrontendDTO.setName(channel.getName());
+            channelFrontendDTO.setUser(channel.getUser());
+            channelFrontendDTO.setDescription(channel.getDescription());
+            channelFrontendDTO.setMonetized(channel.isMonetized());
+            channelFrontendDTO.setCreatedAt(channel.getCreatedAt());
+            channelFrontendDTO.setSubscribers(channel.getSubscribers());
+            channelFrontendDTO.setPlayLists(channel.getPlayLists());
+            channelFrontendDTO.setTotalSubs(channel.getTotalSubs());
+            channelFrontendDTO.setTotalViews(channel.getTotalViews());
+            channelFrontendDTO.setVideos(channel.getVideos());
+
+            channelFrontendDTOList.add(channelFrontendDTO);
+
+        }
+
+        return channelFrontendDTOList;
     }
 
     public void addSubscriber(UUID userId , UUID channelId){

@@ -23,7 +23,10 @@ public class JwtConfiguration {
                         auth -> auth.requestMatchers(
                                         "/api/central/user/register",
                                         "/api/central/user/login",
-                                        "/api/central/user/all"
+                                        "/api/central/user/all",
+                                        "api/central/user/delete/{Id}",
+                                        "/api/central/channel/getAllChannels",
+                                        "/api/central/channel/deleteChannelById/{ChannelId}"
                                 ).permitAll()
                                 .anyRequest().authenticated()
                 )

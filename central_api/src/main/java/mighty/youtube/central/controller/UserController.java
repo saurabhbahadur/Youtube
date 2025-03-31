@@ -1,7 +1,9 @@
 package mighty.youtube.central.controller;
 
 
+import mighty.youtube.central.dto.NotificationMessage;
 import mighty.youtube.central.dto.UserCredentialsDTO;
+import mighty.youtube.central.dto.UserFrontendDTO;
 import mighty.youtube.central.models.AppUser;
 import mighty.youtube.central.security.JwtUtil;
 import mighty.youtube.central.service.UserService;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -48,10 +51,15 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<AppUser>> getAllUsers(){
-        List<AppUser> users = userService.getAllUsers();
+    public ResponseEntity<List<UserFrontendDTO>> getAllUsers(){
+        List<UserFrontendDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
+
+    @DeleteMapping("/delete/{Id}")
+    public void deleteUserById(@PathVariable UUID Id){
+        userService.deleteUserById(Id);
+    }
 
 }
