@@ -5,18 +5,18 @@ import mighty.youtube.central.dto.NotificationMessage;
 import mighty.youtube.central.dto.UserCredentialsDTO;
 import mighty.youtube.central.models.AppUser;
 import mighty.youtube.central.repository.AppUserRepo;
-import mighty.youtube.central.security.JwtUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class UserService {
 
-    @Autowired
-    JwtUtil jwtUtil;
+
 
     AppUserRepo appUserRepo;
     RabbitMqService rabbitMqService;
@@ -44,7 +44,7 @@ public class UserService {
         if(user.getPassword().equals(credentials.getPassword())) {
 
             String cred = user.getEmail() + ":" + user.getPassword();
-            return jwtUtil.generateToken(cred);
+            return cred;
         }
         
         return "Incorrect Password";
@@ -62,6 +62,10 @@ public class UserService {
         message.setType("user_registration");
         message.setName((user.getName()));
         rabbitMqService.insertMessageToQueue(message);
+    }
+
+    public List<AppUser> getAllUsers(){
+        return appUserRepo.findAll();
     }
 
 

@@ -10,19 +10,34 @@ const RegisterForm = ({ onClose }) => {
     dob: "",
     gender: "",
     country: "",
+    password: "", 
   });
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/api/central/user/register", {
-        ...formData,
-        phoneNumber: Number(formData.phoneNumber),
-        dob: formData.dob ? new Date(formData.dob).toISOString().split("T")[0] : null,
-      });
-      alert("User registered successfully!");
+      const response = await axios.post(
+        "http://localhost:3000/api/central/user/register",
+        {
+          ...formData,
+          phoneNumber: Number(formData.phoneNumber),
+          dob: formData.dob
+            ? new Date(formData.dob).toISOString().split("T")[0]
+            : null,
+        }
+      );
+
+      
+      console.log(response);
+      if (response.data) {
+        localStorage.setItem("authToken", response.data);
+        alert("User registered successfully!");
+      } else {
+        alert("Registration successful, but no token received.");
+      }
     } catch (error) {
       console.error("Error registering user:", error);
       alert("Failed to register user");
@@ -38,24 +53,45 @@ const RegisterForm = ({ onClose }) => {
         </button>
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {["name", "email", "phoneNumber", "dob", "country"].map((field) => (
-          <input
-            key={field}
-            type={field === "dob" ? "date" : field === "phoneNumber" ? "tel" : "text"}
-            name={field}
-            placeholder={field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " $1")}
-            className="w-full p-2 border rounded-md focus:ring-2 focus:ring-red-400"
-            onChange={handleChange}
-            required
-          />
-        ))}
-        <select name="gender" className="w-full p-2 border rounded-md focus:ring-2 focus:ring-red-400" onChange={handleChange} required>
+        {["name", "email", "phoneNumber", "dob", "country", "password"].map(
+          (field) => (
+            <input
+              key={field}
+              type={
+                field === "dob"
+                  ? "date"
+                  : field === "phoneNumber"
+                  ? "tel"
+                  : field === "password"
+                  ? "password"
+                  : "text"
+              }
+              name={field}
+              placeholder={field
+                .charAt(0)
+                .toUpperCase()
+                .concat(field.slice(1).replace(/([A-Z])/g, " $1"))}
+              className="w-full p-2 border rounded-md focus:ring-2 focus:ring-red-400"
+              onChange={handleChange}
+              required
+            />
+          )
+        )}
+        <select
+          name="gender"
+          className="w-full p-2 border rounded-md focus:ring-2 focus:ring-red-400"
+          onChange={handleChange}
+          required
+        >
           <option value="">Select Gender</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
           <option value="Other">Other</option>
         </select>
-        <button type="submit" className="w-full bg-red-600 text-white p-2 rounded-md hover:bg-red-700 transition">
+        <button
+          type="submit"
+          className="w-full bg-red-600 text-white p-2 rounded-md hover:bg-red-700 transition"
+        >
           Register
         </button>
       </form>
