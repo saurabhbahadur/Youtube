@@ -26,7 +26,8 @@ public class JwtConfiguration {
                                         "/api/central/user/all",
                                         "api/central/user/delete/{Id}",
                                         "/api/central/channel/getAllChannels",
-                                        "/api/central/channel/deleteChannelById/{ChannelId}"
+                                        "/api/central/channel/deleteChannelById/{ChannelId}",
+                                "/api/central/channel/{channelId}/video/upload"
                                 ).permitAll()
                                 .anyRequest().authenticated()
                 )

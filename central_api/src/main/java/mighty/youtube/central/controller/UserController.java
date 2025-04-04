@@ -38,7 +38,7 @@ public class UserController {
         return jwtUtil.generateToken(credentials);
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity loginUser(@RequestBody UserCredentialsDTO credentials) {
 
         String resp = userService.loginUser(credentials);

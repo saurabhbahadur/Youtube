@@ -6,6 +6,7 @@ import io.imagekit.sdk.exceptions.*;
 import io.imagekit.sdk.models.FileCreateRequest;
 import io.imagekit.sdk.models.results.Result;
 import mighty.youtube.video.dto.VideoDetail;
+import mighty.youtube.video.dto.VideoDetailsDTO;
 import mighty.youtube.video.dto.VideoDetailsRequestBody;
 import mighty.youtube.video.exception.InvalidFileType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
 public class UploadService {
+
+    @Autowired
+    CentralApiConnectionService centralApiConnectionService;
 
     @Autowired
     ImageKit imageKit;
@@ -47,6 +52,18 @@ public class UploadService {
         VideoDetail videoDetail = new VideoDetail();
         videoDetail.setVideoId(videoId);
         videoDetail.setVideoUrl(videoUrl);
+
+        VideoDetailsDTO videoDetailsDTO = new VideoDetailsDTO();
+        videoDetailsDTO.setVideoLink(videoUrl);
+        videoDetailsDTO.setId(videoId);
+        videoDetailsDTO.setTags(videoDetailsRequestBody.getTags());
+        videoDetailsDTO.setUploadDateTime(LocalDateTime.now());
+        videoDetailsDTO.setUpdatedAt(LocalDateTime.now());
+        videoDetailsDTO.setName(videoDetailsRequestBody.getName());
+        videoDetailsDTO.setDescription(videoDetailsRequestBody.getDescription());
+
+        centralApiConnectionService.saveVideoDetails(channelId,videoDetailsDTO);
+
 
         return videoDetail;
 

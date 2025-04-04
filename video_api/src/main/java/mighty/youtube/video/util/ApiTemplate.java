@@ -6,7 +6,7 @@ public interface ApiTemplate {
 
     public Object makeGetCall(String apiUrl ,String endPoint, Map<String , String> queryParam);
 
-    public Object makePostCall(String apiUrl ,String endPoint, Map<String , String> queryParam , Object requestBody);
+    public Object makePostCall(String apiUrl ,String endPoint, Map<String , String> queryParam , Object requestBody ,String token);
 
     public Object makePutCall(String apiUrl ,String endPoint, Map<String , String> queryParam , Object requestBody);
 }

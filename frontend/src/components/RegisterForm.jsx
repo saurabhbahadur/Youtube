@@ -45,7 +45,7 @@ const RegisterForm = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl py-16 px-6 overflow-auto transition-transform transform translate-x-0">
+    <div className="fixed z-10 top-0 right-0 h-full w-80 bg-white shadow-2xl py-16 px-6 overflow-auto transition-transform transform translate-x-0">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold text-red-600">Signup</h2>
         <button onClick={onClose} className="text-gray-600 hover:text-gray-800">

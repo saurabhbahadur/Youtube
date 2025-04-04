@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/vi/video")
+@RequestMapping("/api/v1/video")
 public class VideoController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class VideoController {
     @PostMapping("/upload")
     public ResponseEntity uploadVideo(@RequestPart("videoFile")MultipartFile video,
                                       @RequestParam UUID channelId,
-                                      @RequestPart VideoDetailsRequestBody videoDetailsRequestBody){
+                                      @RequestPart ("videodetails") VideoDetailsRequestBody videoDetailsRequestBody){
 
         try{
         VideoDetail videoDetail = uploadService.uploadVideo(video , channelId , videoDetailsRequestBody);

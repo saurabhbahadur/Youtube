@@ -1,9 +1,11 @@
 package mighty.youtube.video.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -47,10 +49,15 @@ public class ApiTemplateImpl implements ApiTemplate {
     }
 
     @Override
-    public Object makePostCall(String apiUrl, String endPoint, Map<String, String> queryParams, Object requestBody) {
+    public Object makePostCall(String apiUrl, String endPoint, Map<String, String> queryParams, Object requestBody, String token ) {
         URI url = this.createUrl(apiUrl, endPoint, queryParams);
+
         RequestEntity request = RequestEntity.post(url).body(requestBody);
-        ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.POST, request, Object.class);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("Authorization", "Bearer " + token);
+
+        ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.POST, request, Object.class );
         return response.getBody();
     }
 

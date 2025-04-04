@@ -31,5 +31,5 @@ public class ChannelFrontendDTO {
     @OneToMany
     List<PlayList> playLists;
     LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+
 }
